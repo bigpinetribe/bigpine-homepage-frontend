@@ -1,0 +1,89 @@
+backend:
+  name: github
+  repo: bigpinetribe/bigpine-homepage-frontend
+  branch: main
+
+# For local development, uncomment this:
+# local_backend: true
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: departments
+    label: Departments
+    folder: content/departments
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - { label: "Department Name", name: "name", widget: "string", required: true }
+      - { label: "URL Slug", name: "slug", widget: "string", required: true, hint: "e.g., 'environmental', 'housing', 'education'" }
+      - { label: "Page Content", name: "body", widget: "markdown" }
+      - label: "Staff Members"
+        name: "staff"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Name", name: "name", widget: "string", required: true }
+          - { label: "Title", name: "title", widget: "string", required: false }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Phone", name: "phone", widget: "string", required: false }
+          - { label: "Photo", name: "photo", widget: "image", required: false }
+      - label: "Documents & Forms"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Document Title", name: "title", widget: "string", required: true }
+          - { label: "File URL or Path", name: "url", widget: "string", required: true }
+          - { label: "Description", name: "description", widget: "string", required: false }
+
+  - name: news
+    label: "News & Events"
+    folder: content/news
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: md
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false, hint: "Short summary for listing pages" }
+      - { label: "Featured Image", name: "featuredImage", widget: "image", required: false }
+      - { label: "Category", name: "category", widget: "select", options: ["News", "Event", "Announcement", "Meeting"], required: false }
+      - { label: "Content", name: "body", widget: "markdown" }
+
+  - name: settings
+    label: "Site Settings"
+    files:
+      - name: global
+        label: "Global Settings"
+        file: content/global/settings.json
+        fields:
+          - label: "Tribal Council"
+            name: "tribalCouncil"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string", required: true }
+              - { label: "Position", name: "title", widget: "string", required: false, hint: "e.g., 'Chairman', 'Vice Chairman'" }
+              - { label: "Photo", name: "photo", widget: "image", required: false }
+          - label: "Contact Information"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Address", name: "address", widget: "string" }
+              - { label: "Phone", name: "phone", widget: "string" }
+              - { label: "Fax", name: "fax", widget: "string" }
+              - { label: "Email", name: "email", widget: "string" }
+          - { label: "Facebook Page URL", name: "facebookUrl", widget: "string", required: false }
+
+  - name: pages
+    label: "Pages"
+    folder: content/pages
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "URL Path", name: "slug", widget: "string", required: true }
+      - { label: "Content", name: "body", widget: "markdown" }
