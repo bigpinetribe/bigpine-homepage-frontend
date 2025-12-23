@@ -93,8 +93,33 @@ const settings = await getGlobalSettings();
               <li class="nav-item">
                 <a class="nav-link" href="/contact">Contact Us</a>
               </li>
-              <li class="nav-item" id="auth-nav-item">
+              <li class="nav-item" id="auth-nav-item-guest" style="display: none;">
                 <a class="nav-link" href="/login">Login</a>
+              </li>
+              <li class="nav-item dropdown" id="auth-nav-item-user" style="display: none;">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="accountDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-user-circle"></i> <span id="user-name-nav">Account</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                  <li>
+                    <a class="dropdown-item" href="/account">
+                      <i class="fas fa-user"></i> My Account
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" href="#" id="nav-logout-btn">
+                      <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
@@ -171,6 +196,49 @@ const settings = await getGlobalSettings();
           navbar?.classList.add("navbar-large");
         }
       });
+    </script>
+    <script>
+      import { supabase } from "../lib/supabase";
+      
+      // Check authentication state and update navigation
+      async function updateNavAuth() {
+        const guestNav = document.getElementById("auth-nav-item-guest");
+        const userNav = document.getElementById("auth-nav-item-user");
+        const userNameNav = document.getElementById("user-name-nav");
+        const logoutBtn = document.getElementById("nav-logout-btn");
+        
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          // User is logged in
+          if (guestNav) guestNav.style.display = "none";
+          if (userNav) userNav.style.display = "block";
+          
+          // Fetch user profile to get name
+          const { data: profile } = await supabase
+            .from("user_profiles")
+            .select("first_name")
+            .eq("id", session.user.id)
+            .single();
+          
+          if (profile && userNameNav) {
+            userNameNav.textContent = profile.first_name;
+          }
+        } else {
+          // User is not logged in
+          if (guestNav) guestNav.style.display = "block";
+          if (userNav) userNav.style.display = "none";
+        }
+        
+        // Handle logout
+        logoutBtn?.addEventListener("click", async (e) => {
+          e.preventDefault();
+          await supabase.auth.signOut();
+          window.location.href = "/";
+        });
+      }
+      
+      updateNavAuth();
     </script>
     <slot name="scripts" />
   </body>

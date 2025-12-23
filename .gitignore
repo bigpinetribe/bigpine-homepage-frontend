@@ -28,3 +28,8 @@ pnpm-debug.log*
 
 # Cloudflare Pages
 .wrangler/
+
+# Supabase local development files
+.temp/
+supabase/.branches
+supabase/.temp

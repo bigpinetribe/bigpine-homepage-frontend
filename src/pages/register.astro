@@ -1,0 +1,184 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Register - Big Pine Paiute Tribe" showBanner={false}>
+  <div class="login-container">
+    <div class="login-form">
+      <img
+        src="/img/big_pine_seal_150.png"
+        alt="Big Pine Paiute Tribe Seal"
+        class="mb-4"
+        style="width: 100px;"
+      />
+      <h2>Member Registration</h2>
+      <div id="error-message" class="alert-danger" style="display: none;"></div>
+      <div id="success-message" class="alert-success" style="display: none;"></div>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" class="form-control" id="firstName" name="firstName" required />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" class="form-control" id="lastName" name="lastName" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" class="form-control" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone" placeholder="(555) 123-4567" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            name="password" 
+            required 
+            minlength="6"
+          />
+          <small class="form-text text-muted">Must be at least 6 characters</small>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="confirmPassword" 
+            name="confirmPassword" 
+            required 
+            minlength="6"
+          />
+        </div>
+        <div class="form-group">
+          <label for="enrollmentNumber">Tribal Enrollment Number</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="enrollmentNumber" 
+            name="enrollmentNumber" 
+            placeholder="Optional"
+          />
+          <small class="form-text text-muted">If you are an enrolled tribal member</small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="register-btn">
+          Register
+        </button>
+      </form>
+      <div class="form-footer">
+        <p>Already have an account? <a href="/login">Login here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from "../lib/supabase";
+
+    const form = document.getElementById("register-form") as HTMLFormElement;
+    const errorMessage = document.getElementById("error-message") as HTMLDivElement;
+    const successMessage = document.getElementById("success-message") as HTMLDivElement;
+    const registerBtn = document.getElementById("register-btn") as HTMLButtonElement;
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMessage.style.display = "none";
+      successMessage.style.display = "none";
+      registerBtn.disabled = true;
+      registerBtn.textContent = "Registering...";
+
+      const formData = new FormData(form);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+      const confirmPassword = formData.get("confirmPassword") as string;
+      const firstName = formData.get("firstName") as string;
+      const lastName = formData.get("lastName") as string;
+      const phone = formData.get("phone") as string;
+      const enrollmentNumber = formData.get("enrollmentNumber") as string;
+
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        errorMessage.textContent = "Passwords do not match";
+        errorMessage.style.display = "block";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Register";
+        return;
+      }
+
+      try {
+        // Register the user with Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              phone: phone || null,
+              enrollment_number: enrollmentNumber || null,
+            },
+          },
+        });
+
+        if (authError) {
+          errorMessage.textContent = authError.message;
+          errorMessage.style.display = "block";
+          registerBtn.disabled = false;
+          registerBtn.textContent = "Register";
+          return;
+        }
+
+        // If user was created, also create their profile in user_profiles table
+        if (authData.user) {
+          const { error: profileError } = await supabase.from("user_profiles").insert({
+            id: authData.user.id,
+            email: email,
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone || null,
+            enrollment_number: enrollmentNumber || null,
+            role: "member", // Default role
+          });
+
+          if (profileError) {
+            console.error("Profile creation error:", profileError);
+            errorMessage.textContent = 
+              "Account created but profile setup failed. Please contact support. Error: " + 
+              profileError.message;
+            errorMessage.style.display = "block";
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Register";
+            return;
+          }
+        }
+
+        successMessage.textContent = 
+          "Registration successful! Please check your email to verify your account.";
+        successMessage.style.display = "block";
+        form.reset();
+        
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 3000);
+        
+      } catch (err) {
+        console.error("Registration error:", err);
+        errorMessage.textContent = "An unexpected error occurred. Please try again.";
+        errorMessage.style.display = "block";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Register";
+      }
+    });
+
+    // Check if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.location.href = "/";
+      }
+    });
+  </script>
+</BaseLayout>
