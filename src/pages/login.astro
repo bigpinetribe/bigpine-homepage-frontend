@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Login - Big Pine Paiute Tribe" showBanner={false}>
+  <div class="login-container">
+    <div class="login-form">
+      <img
+        src="/img/big_pine_seal_150.png"
+        alt="Big Pine Paiute Tribe Seal"
+        class="mb-4"
+        style="width: 100px;"
+      />
+      <h2>Member Login</h2>
+      <div id="error-message" class="alert-danger" style="display: none;"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+          Login
+        </button>
+      </form>
+      <div class="form-footer">
+        <a href="/forgot-password">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from "../lib/supabase";
+
+    const form = document.getElementById("login-form") as HTMLFormElement;
+    const errorMessage = document.getElementById("error-message") as HTMLDivElement;
+    const loginBtn = document.getElementById("login-btn") as HTMLButtonElement;
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMessage.style.display = "none";
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging in...";
+
+      const formData = new FormData(form);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Login";
+          return;
+        }
+
+        // Redirect to home page on success
+        window.location.href = "/";
+      } catch (err) {
+        errorMessage.textContent = "An unexpected error occurred. Please try again.";
+        errorMessage.style.display = "block";
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+      }
+    });
+
+    // Check if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.location.href = "/";
+      }
+    });
+  </script>
+</BaseLayout>

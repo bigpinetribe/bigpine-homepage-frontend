@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { DEPARTMENTS, type DepartmentSlug } from "../../config/departments";
+
+export function getStaticPaths() {
+  return Object.keys(DEPARTMENTS).map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params as { slug: DepartmentSlug };
+const departmentName = DEPARTMENTS[slug] || "Department";
+
+// In production, this content will come from TinaCMS
+// For now, we'll show a placeholder
+const pageContent = `
+<p>Welcome to the ${departmentName} page. Content for this department will be managed through the CMS.</p>
+`;
+
+const staff: any[] = [];
+const updatedAt = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={`${departmentName} - Big Pine Paiute Tribe`}>
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>{departmentName}</h1>
+      <p class="text-muted small">Last updated: {updatedAt}</p>
+
+      <div class="department-content" set:html={pageContent} />
+    </div>
+
+    <div class="col-lg-4">
+      {
+        staff.length > 0 && (
+          <div class="pop-section p-4">
+            <h3>Staff</h3>
+            <ul class="list-group list-group-flush">
+              {staff.map((member: any) => (
+                <li class="list-group-item">
+                  <strong>{member.name}</strong>
+                  {member.title && <br />}
+                  {member.title && <span class="text-muted">{member.title}</span>}
+                  {member.email && (
+                    <>
+                      <br />
+                      <a href={`mailto:${member.email}`}>{member.email}</a>
+                    </>
+                  )}
+                  {member.phone && (
+                    <>
+                      <br />
+                      <span>{member.phone}</span>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="pop-section p-4 mt-4">
+        <h3>Contact This Department</h3>
+        <p>
+          For questions about {departmentName}, please contact the main office or visit our{" "}
+          <a href="/contact">contact page</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

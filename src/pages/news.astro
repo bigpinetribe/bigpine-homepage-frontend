@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// In production, this will come from TinaCMS
+const posts: any[] = [];
+---
+
+<BaseLayout title="News & Events - Big Pine Paiute Tribe">
+  <h1>News & Events</h1>
+
+  {
+    posts.length > 0 ? (
+      <div class="row">
+        {posts.map((post) => (
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              {post.image && (
+                <img src={post.image} class="card-img-top" alt={post.title} />
+              )}
+              <div class="card-body">
+                <h5 class="card-title">{post.title}</h5>
+                <p class="card-text text-muted small">{post.date}</p>
+                <p class="card-text">{post.excerpt}</p>
+                <a href={`/news/${post.slug}`} class="btn btn-primary btn-sm">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="pop-section p-4">
+        <p>No news posts yet. Check back soon for updates!</p>
+      </div>
+    )
+  }
+</BaseLayout>

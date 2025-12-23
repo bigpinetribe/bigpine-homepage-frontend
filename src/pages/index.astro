@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// In production, this will come from TinaCMS
+const council = [
+  // Placeholder - will be populated from CMS
+];
+---
+
+<BaseLayout>
+  <div class="row">
+    <div class="col-lg-8">
+      <h1>Welcome to the Big Pine Paiute Tribe</h1>
+      <p class="lead">
+        The Big Pine Paiute Tribe of the Owens Valley is a federally recognized tribe located in
+        Big Pine, California, in Inyo County at the base of the Eastern Sierra Nevada mountains.
+      </p>
+
+      <div class="pop-section p-4 my-4">
+        <h2>About Our Tribe</h2>
+        <p>
+          The Big Pine Paiute Tribe has a rich history and culture that spans thousands of years.
+          Our reservation is home to tribal members who continue to preserve and celebrate our
+          heritage while building a strong future for generations to come.
+        </p>
+      </div>
+
+      <div class="my-4">
+        <h2>Announcements</h2>
+        <p>Check back soon for the latest news and announcements from the tribe.</p>
+        <a href="/news" class="btn btn-primary">View All News</a>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="pop-section p-4">
+        <h3>Tribal Council</h3>
+        {
+          council.length > 0 ? (
+            <ul class="list-group list-group-flush">
+              {council.map((member: any) => (
+                <li class="list-group-item">
+                  <strong>{member.name}</strong>
+                  {member.title && <br />}
+                  {member.title && <span class="text-muted">{member.title}</span>}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-muted">Council information coming soon.</p>
+          )
+        }
+      </div>
+
+      <div class="pop-section p-4 mt-4">
+        <h3>Contact Us</h3>
+        <p>
+          <strong>Big Pine Paiute Tribe</strong><br />
+          P.O. Box 700<br />
+          Big Pine, CA 93513<br />
+          <br />
+          <a href="/contact">View full contact information</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
