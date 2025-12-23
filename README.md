@@ -1,46 +1,71 @@
-# Astro Starter Kit: Basics
+# Big Pine Paiute Tribe - Website Frontend
 
-```sh
-npm create astro@latest -- --template basics
+Modern static website for the Big Pine Paiute Tribe of the Owens Valley, built with Astro + React.
+
+## Tech Stack
+
+- **Framework**: [Astro](https://astro.build/) with React islands
+- **Styling**: Bootstrap 5
+- **Authentication**: Supabase Auth
+- **CMS**: TinaCMS (separate repo)
+- **Hosting**: Cloudflare Pages
+
+## Getting Started
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Copy `.env.example` to `.env` and fill in your Supabase credentials:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open http://localhost:4321
+
+## Project Structure
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
 /
 ├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+│   ├── img/              # Static images
+│   ├── forms/            # Downloadable PDF forms
+│   └── department_media/ # Department-specific files
+├── src/
+│   ├── config/           # Configuration (departments, etc.)
+│   ├── layouts/          # Page layouts
+│   ├── lib/              # Utilities (Supabase client, etc.)
+│   ├── pages/            # Astro pages
+│   └── styles/           # Global CSS
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Pages
 
-## 🧞 Commands
+- `/` - Home page
+- `/login` - Member login
+- `/account` - Member account page (protected)
+- `/contact` - Contact information
+- `/news` - News and events
+- `/department/[slug]` - Department pages
 
-All commands are run from the root of the project, from a terminal:
+## Deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+This site is deployed to Cloudflare Pages. Push to `main` to trigger a deployment.
 
-## 👀 Want to learn more?
+### Environment Variables (Cloudflare Pages)
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Set these in Cloudflare Pages dashboard:
+
+- `PUBLIC_SUPABASE_URL` - Your Supabase project URL
+- `PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anon key
+
+## Related Repos
+
+- [bigpine-homepage-cms](https://github.com/kubishi/bigpine-homepage-cms) - TinaCMS content management
