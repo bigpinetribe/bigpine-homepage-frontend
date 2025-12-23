@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # Cloudflare Pages
 .wrangler/
+
+# TinaCMS generated
+tina/__generated__/
