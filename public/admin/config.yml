@@ -2,9 +2,8 @@ backend:
   name: github
   repo: bigpinetribe/bigpine-homepage-frontend
   branch: main
-
-# For local development, uncomment this:
-# local_backend: true
+  base_url: https://tribe.kubishi.com
+  auth_endpoint: /auth
 
 media_folder: public/uploads
 public_folder: /uploads
