@@ -10,7 +10,7 @@ export async function onRequest(context) {
     const authUrl = new URL('https://github.com/login/oauth/authorize');
     authUrl.searchParams.set('client_id', env.GITHUB_CLIENT_ID);
     authUrl.searchParams.set('redirect_uri', `${url.origin}/callback`);
-    authUrl.searchParams.set('scope', 'repo,user');
+    authUrl.searchParams.set('scope', 'repo,user,read:org');
     authUrl.searchParams.set('state', crypto.randomUUID());
 
     return Response.redirect(authUrl.toString(), 302);
