@@ -1,10 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getGlobalSettings, getNews } from "../lib/content";
 
-// In production, this will come from TinaCMS
-const council = [
-  // Placeholder - will be populated from CMS
-];
+const settings = await getGlobalSettings();
+const council = settings.tribalCouncil || [];
+const contact = settings.contact || {};
+
+// Get latest 3 news items
+const allNews = await getNews();
+const latestNews = allNews.slice(0, 3);
 ---
 
 <BaseLayout>
@@ -26,8 +30,24 @@ const council = [
       </div>
 
       <div class="my-4">
-        <h2>Announcements</h2>
-        <p>Check back soon for the latest news and announcements from the tribe.</p>
+        <h2>Latest News</h2>
+        {latestNews.length > 0 ? (
+          <div class="list-group mb-3">
+            {latestNews.map((post) => (
+              <a href={`/news/${post.id}`} class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{post.data.title}</h5>
+                  <small class="text-muted">
+                    {post.data.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  </small>
+                </div>
+                {post.data.excerpt && <p class="mb-1 text-muted">{post.data.excerpt}</p>}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p>Check back soon for the latest news and announcements from the tribe.</p>
+        )}
         <a href="/news" class="btn btn-primary">View All News</a>
       </div>
     </div>
@@ -38,7 +58,7 @@ const council = [
         {
           council.length > 0 ? (
             <ul class="list-group list-group-flush">
-              {council.map((member: any) => (
+              {council.map((member) => (
                 <li class="list-group-item">
                   <strong>{member.name}</strong>
                   {member.title && <br />}
@@ -56,8 +76,8 @@ const council = [
         <h3>Contact Us</h3>
         <p>
           <strong>Big Pine Paiute Tribe</strong><br />
-          P.O. Box 700<br />
-          Big Pine, CA 93513<br />
+          {contact.address && <>{contact.address}<br /></>}
+          {contact.phone && <>Phone: {contact.phone}<br /></>}
           <br />
           <a href="/contact">View full contact information</a>
         </p>

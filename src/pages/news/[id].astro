@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const news = await getCollection("news");
+  return news.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = post.data.date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={`${post.data.title} - Big Pine Paiute Tribe`}>
+  <article>
+    <header class="mb-4">
+      <h1>{post.data.title}</h1>
+      <p class="text-muted">
+        {formattedDate}
+        {post.data.category && <span class="badge bg-secondary ms-2">{post.data.category}</span>}
+      </p>
+    </header>
+
+    {post.data.featuredImage && (
+      <img
+        src={post.data.featuredImage}
+        alt={post.data.title}
+        class="img-fluid mb-4 rounded"
+      />
+    )}
+
+    <div class="content">
+      <Content />
+    </div>
+
+    <hr class="my-4" />
+
+    <a href="/news" class="btn btn-outline-primary">&larr; Back to News</a>
+  </article>
+</BaseLayout>

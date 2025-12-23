@@ -1,5 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getGlobalSettings } from "../lib/content";
+
+const settings = await getGlobalSettings();
+const contact = settings.contact || {};
 ---
 
 <BaseLayout title="Contact Us - Big Pine Paiute Tribe">
@@ -11,12 +15,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <h2>Main Office</h2>
         <p>
           <strong>Big Pine Paiute Tribe of the Owens Valley</strong><br />
-          P.O. Box 700<br />
-          Big Pine, CA 93513
+          {contact.address || "P.O. Box 700, Big Pine, CA 93513"}
         </p>
         <p>
-          <strong>Phone:</strong> (760) 938-2003<br />
-          <strong>Fax:</strong> (760) 938-2942
+          {contact.phone && <><strong>Phone:</strong> {contact.phone}<br /></>}
+          {contact.fax && <><strong>Fax:</strong> {contact.fax}<br /></>}
+          {contact.email && <><strong>Email:</strong> <a href={`mailto:${contact.email}`}>{contact.email}</a></>}
         </p>
       </div>
 

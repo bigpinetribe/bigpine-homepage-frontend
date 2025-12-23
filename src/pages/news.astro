@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getNews } from "../lib/content";
 
-// In production, this will come from TinaCMS
-const posts: any[] = [];
+const posts = await getNews();
 ---
 
 <BaseLayout title="News & Events - Big Pine Paiute Tribe">
@@ -14,14 +14,21 @@ const posts: any[] = [];
         {posts.map((post) => (
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
-              {post.image && (
-                <img src={post.image} class="card-img-top" alt={post.title} />
+              {post.data.featuredImage && (
+                <img src={post.data.featuredImage} class="card-img-top" alt={post.data.title} />
               )}
               <div class="card-body">
-                <h5 class="card-title">{post.title}</h5>
-                <p class="card-text text-muted small">{post.date}</p>
-                <p class="card-text">{post.excerpt}</p>
-                <a href={`/news/${post.slug}`} class="btn btn-primary btn-sm">
+                <h5 class="card-title">{post.data.title}</h5>
+                <p class="card-text text-muted small">
+                  {post.data.date.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                  {post.data.category && <span class="badge bg-secondary ms-2">{post.data.category}</span>}
+                </p>
+                {post.data.excerpt && <p class="card-text">{post.data.excerpt}</p>}
+                <a href={`/news/${post.id}`} class="btn btn-primary btn-sm">
                   Read More
                 </a>
               </div>

@@ -1,5 +1,5 @@
 ---
-import { DEPARTMENTS } from "../config/departments";
+import { getDepartments, getGlobalSettings } from "../lib/content";
 import "../styles/global.css";
 
 interface Props {
@@ -9,6 +9,9 @@ interface Props {
 
 const { title = "Big Pine Paiute Tribe of the Owens Valley", showBanner = true } = Astro.props;
 const currentYear = new Date().getFullYear();
+
+const departments = await getDepartments();
+const settings = await getGlobalSettings();
 ---
 
 <!DOCTYPE html>
@@ -41,7 +44,7 @@ const currentYear = new Date().getFullYear();
                 />
               </div>
               <div class="col d-none d-lg-inline">
-                Big Pine Tribe of the Owens Valley
+                Big Pine Paiute Tribe of the Owens Valley
               </div>
             </div>
           </a>
@@ -74,10 +77,10 @@ const currentYear = new Date().getFullYear();
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="departmentsDropdown">
                   {
-                    Object.entries(DEPARTMENTS).map(([slug, name]) => (
+                    departments.map((dept) => (
                       <li>
-                        <a class="dropdown-item bg-light" href={`/department/${slug}`}>
-                          {name}
+                        <a class="dropdown-item bg-light" href={`/department/${dept.slug}`}>
+                          {dept.name}
                         </a>
                       </li>
                     ))
@@ -138,9 +141,11 @@ const currentYear = new Date().getFullYear();
             &copy; {currentYear} Big Pine Paiute Tribe of the Owens Valley.
           </div>
           <div class="col-12 col-lg-2 my-1 pt-3 text-lg-end">
-            <a href="https://www.facebook.com/profile.php?id=61551816693496" class="mx-1">
-              <i class="fab fa-facebook fa-2x" style="color:gray;"></i>
-            </a>
+            {settings.facebookUrl && (
+              <a href={settings.facebookUrl} class="mx-1">
+                <i class="fab fa-facebook fa-2x" style="color:gray;"></i>
+              </a>
+            )}
           </div>
         </div>
       </div>
