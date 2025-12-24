@@ -64,8 +64,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           return;
         }
 
-        // Redirect to home page on success
-        window.location.href = "/";
+        // Redirect to returnTo URL or home page on success
+        const params = new URLSearchParams(window.location.search);
+        const returnTo = params.get("returnTo") || "/";
+        window.location.href = returnTo;
       } catch (err) {
         errorMessage.textContent = "An unexpected error occurred. Please try again.";
         errorMessage.style.display = "block";
@@ -77,7 +79,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     // Check if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        window.location.href = "/";
+        const params = new URLSearchParams(window.location.search);
+        const returnTo = params.get("returnTo") || "/";
+        window.location.href = returnTo;
       }
     });
   </script>

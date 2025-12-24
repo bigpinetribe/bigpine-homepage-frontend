@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Member Services - Big Pine Paiute Tribe">
+  <h1>Member Services</h1>
+
+  <div class="pop-section p-4 mb-4">
+    <p class="lead">
+      Welcome to the tribal member services portal. This area is exclusively for enrolled members
+      of the Big Pine Paiute Tribe.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="pop-section p-4 h-100">
+        <h3>My Account</h3>
+        <p>View and update your contact information, enrollment status, and preferences.</p>
+        <a href="/account" class="btn btn-primary">Go to Account</a>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="pop-section p-4 h-100">
+        <h3>Tribal Resources</h3>
+        <p>Access documents, forms, and resources available to tribal members.</p>
+        <a href="/members/resources" class="btn btn-secondary">View Resources</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="pop-section p-4 h-100">
+        <h3>Programs & Services</h3>
+        <p>Learn about programs and services available to enrolled members.</p>
+        <a href="/members/programs" class="btn btn-secondary">View Programs</a>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="pop-section p-4 h-100">
+        <h3>Announcements</h3>
+        <p>Stay up to date with announcements for tribal members.</p>
+        <a href="/members/announcements" class="btn btn-secondary">View Announcements</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

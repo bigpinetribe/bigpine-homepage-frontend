@@ -5,7 +5,7 @@ This is the frontend codebase for the Big Pine Paiute Tribe's website, built usi
 ## TODO
 - [ ] Improve user registration flow (need verification step by admin to confirm tribal enrollment)
 - [ ] Add content
-- [ ] Add cloudflare access to protect tribal-member-only pages (how to integrate this with app-based login?)
-- [ ] Implement password reset functionality
-- [ ] Fix map in contact to point to tribal office
-- [ ] Integrate Decap Editorial Workflows (https://decapcms.org/docs/editorial-workflows/)
+- [x] Add route protection for /members/* pages using Cloudflare Functions middleware
+- [x] Implement password reset functionality
+- [x] Fix map in contact to point to tribal office (825 S Main St, Big Pine, CA)
+- [x] Integrate Decap Editorial Workflows
