@@ -1,68 +1,51 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getMemberAnnouncements } from "../../lib/content";
+import { render } from "astro:content";
+
+const announcements = await getMemberAnnouncements();
 ---
 
 <BaseLayout title="Member Announcements - Big Pine Paiute Tribe">
   <h1>Member Announcements</h1>
 
   <div class="pop-section p-4 mb-4">
-    <p class="lead">
+    <p class="lead mb-0">
       Important announcements and updates for enrolled tribal members.
     </p>
   </div>
 
-  <div class="pop-section p-4 mb-4">
-    <div class="d-flex justify-content-between align-items-start">
-      <h3>General Council Meeting Scheduled</h3>
-      <span class="badge bg-primary">New</span>
+  {announcements.length === 0 ? (
+    <div class="pop-section p-4">
+      <p class="text-muted mb-0">No announcements at this time.</p>
     </div>
-    <p class="text-muted small">Posted: December 20, 2024</p>
-    <p>
-      The next General Council meeting is scheduled for January 15, 2025 at 6:00 PM
-      at the Tribal Community Center. All enrolled members are encouraged to attend.
-      Dinner will be provided.
-    </p>
-    <p><strong>Agenda items include:</strong></p>
-    <ul>
-      <li>Annual budget review</li>
-      <li>Program updates from department directors</li>
-      <li>Open forum for member questions</li>
-    </ul>
-  </div>
+  ) : (
+    announcements.map(async (announcement) => {
+      const { Content } = await render(announcement);
+      return (
+        <div class="pop-section p-4 mb-4">
+          <div class="d-flex justify-content-between align-items-start">
+            <h3>{announcement.data.title}</h3>
+            {announcement.data.isNew && (
+              <span class="badge bg-primary">New</span>
+            )}
+          </div>
+          <p class="text-muted small">
+            Posted: {announcement.data.date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+          <div class="content">
+            <Content />
+          </div>
+        </div>
+      );
+    })
+  )}
 
-  <div class="pop-section p-4 mb-4">
-    <h3>Holiday Office Closure</h3>
-    <p class="text-muted small">Posted: December 15, 2024</p>
-    <p>
-      Tribal offices will be closed December 24-25 and January 1 for the holidays.
-      Regular office hours will resume January 2, 2025.
-    </p>
-    <p>
-      For emergencies during the closure, please contact the emergency line at (760) 555-0199.
-    </p>
+  <div class="mt-4">
+    <a href="/members/" class="btn btn-secondary">&larr; Back to Member Services</a>
   </div>
-
-  <div class="pop-section p-4 mb-4">
-    <h3>Per Capita Distribution Notice</h3>
-    <p class="text-muted small">Posted: December 1, 2024</p>
-    <p>
-      Per capita distributions for Q4 2024 will be processed the week of December 16th.
-      Please ensure your mailing address and direct deposit information is up to date
-      by contacting the Enrollment Office.
-    </p>
-  </div>
-
-  <nav aria-label="Announcement pagination">
-    <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1">Previous</a>
-      </li>
-      <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
-    </ul>
-  </nav>
 </BaseLayout>

@@ -35,3 +35,13 @@ export async function getNews() {
   const news = await getCollection("news");
   return news.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
+
+export async function getMemberPages() {
+  const pages = await getCollection("members");
+  return pages;
+}
+
+export async function getMemberAnnouncements() {
+  const announcements = await getCollection("member-announcements");
+  return announcements.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+}

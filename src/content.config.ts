@@ -32,7 +32,27 @@ const news = defineCollection({
   }),
 });
 
+const members = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/members" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
+const memberAnnouncements = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/member-announcements" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    isNew: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   departments,
   news,
+  members,
+  'member-announcements': memberAnnouncements,
 };

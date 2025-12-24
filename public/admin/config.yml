@@ -88,3 +88,27 @@ collections:
       - { label: "Title", name: "title", widget: "string", required: true }
       - { label: "URL Path", name: "slug", widget: "string", required: true }
       - { label: "Content", name: "body", widget: "markdown" }
+
+  - name: members
+    label: "Member Pages"
+    folder: content/members
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "URL Slug", name: "slug", widget: "string", required: true, hint: "e.g., 'resources', 'announcements', 'programs'" }
+      - { label: "Description", name: "description", widget: "text", required: false, hint: "Brief description shown at top of page" }
+      - { label: "Content", name: "body", widget: "markdown" }
+
+  - name: member-announcements
+    label: "Member Announcements"
+    folder: content/member-announcements
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: md
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true }
+      - { label: "Is New", name: "isNew", widget: "boolean", default: true, hint: "Show 'New' badge" }
+      - { label: "Content", name: "body", widget: "markdown" }

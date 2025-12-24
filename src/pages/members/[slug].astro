@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("members");
+  return pages.map((page) => ({
+    params: { slug: page.data.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<BaseLayout title={`${page.data.title} - Big Pine Paiute Tribe`}>
+  <h1>{page.data.title}</h1>
+
+  {page.data.description && (
+    <div class="pop-section p-4 mb-4">
+      <p class="lead mb-0">{page.data.description}</p>
+    </div>
+  )}
+
+  <div class="pop-section p-4">
+    <div class="content">
+      <Content />
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="/members/" class="btn btn-secondary">&larr; Back to Member Services</a>
+  </div>
+</BaseLayout>

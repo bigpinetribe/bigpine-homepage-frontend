@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd password reset, member route protection, and editorial workflows\n\n- Add forgot-password and reset-password pages for Supabase password reset flow\n- Create Cloudflare Functions middleware to protect /members/* routes with Supabase auth\n- Add member services index page at /members/\n- Update login page to support returnTo redirect parameter\n- Fix contact page map to point to tribal office at 825 S Main St, Big Pine, CA\n- Enable Decap CMS editorial workflow for content draft/review/publish process\n- Update README to mark completed TODO items\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd password reset, member route protection, and editorial workflows\n\n- Add forgot-password and reset-password pages for Supabase password reset flow\n- Create Cloudflare Functions middleware to protect /members/* routes with Supabase auth\n- Add member services index page at /members/\n- Update login page to support returnTo redirect parameter\n- Fix contact page map to point to tribal office at 825 S Main St, Big Pine, CA\n- Enable Decap CMS editorial workflow for content draft/review/publish process\n- Update README to mark completed TODO items\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm run build:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
