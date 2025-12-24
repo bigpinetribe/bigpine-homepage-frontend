@@ -18,26 +18,23 @@ export async function onRequest(context) {
   // Parse cookies to get the Supabase auth tokens
   const cookies = parseCookies(request.headers.get('Cookie') || '');
 
-  // Supabase stores auth in cookies with project-specific names
-  // The access token cookie name follows the pattern: sb-<project-ref>-auth-token
-  const authCookieName = Object.keys(cookies).find(
-    name => name.startsWith('sb-') && name.endsWith('-auth-token')
-  );
+  // Look for our auth cookie (set by the client-side Supabase config)
+  const authCookie = cookies['sb-auth-token'];
 
-  if (!authCookieName) {
+  if (!authCookie) {
     return redirectToLogin(request);
   }
 
   let authData;
   try {
-    // The cookie value is a JSON array: [access_token, refresh_token, ...]
-    authData = JSON.parse(cookies[authCookieName]);
+    authData = JSON.parse(authCookie);
   } catch (e) {
     console.error('Failed to parse auth cookie:', e);
     return redirectToLogin(request);
   }
 
-  const accessToken = Array.isArray(authData) ? authData[0] : authData?.access_token;
+  // Extract access token from the session object
+  const accessToken = authData?.access_token;
 
   if (!accessToken) {
     return redirectToLogin(request);
