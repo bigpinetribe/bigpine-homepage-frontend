@@ -54,17 +54,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             minlength="6"
           />
         </div>
-        <div class="form-group">
-          <label for="enrollmentNumber">Tribal Enrollment Number</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="enrollmentNumber" 
-            name="enrollmentNumber" 
-            placeholder="Optional"
-          />
-          <small class="form-text text-muted">If you are an enrolled tribal member</small>
-        </div>
         <button type="submit" class="btn btn-primary btn-block" id="register-btn">
           Register
         </button>
@@ -97,7 +86,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       const firstName = formData.get("firstName") as string;
       const lastName = formData.get("lastName") as string;
       const phone = formData.get("phone") as string;
-      const enrollmentNumber = formData.get("enrollmentNumber") as string;
 
       // Validate passwords match
       if (password !== confirmPassword) {
@@ -118,7 +106,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
               first_name: firstName,
               last_name: lastName,
               phone: phone || null,
-              enrollment_number: enrollmentNumber || null,
             },
           },
         });
@@ -139,7 +126,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             first_name: firstName,
             last_name: lastName,
             phone: phone || null,
-            enrollment_number: enrollmentNumber || null,
             role: "member", // Default role
           });
 
